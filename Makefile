@@ -1,9 +1,19 @@
-.PHONY: install tests
+.PHONY: install tests lint format coverage clean
 
 install:
-	go mod tidy && go mod vendor
+	pip install .[dev] && pip install pytest pytest-cov coverage codecov && pip install -e .
+
+lint:
+	ruff . && mypy pythonuef_github_lib_template
+
+format:
+	black . && ruff --fix .
 
 tests:
-	go test -covermode=set -coverpkg=./... -coverprofile=coverage.txt ./tests && go tool cover -func=coverage.txt
+	PYTHONPATH=. pytest -v --tb=short tests
+
 coverage:
-	go test -v -coverpkg=./... -covermode=set -coverprofile=coverage.txt ./tests && go tool cover -html=coverage.txt -o coverage.html && xdg-open coverage.html
+	PYTHONPATH=. pytest --cov=pythonuef_github_lib_template --cov-report=xml
+
+clean:
+	rm -rf dist/ build/ *.egg-info __pycache__ .pytest_cache .mypy_cache

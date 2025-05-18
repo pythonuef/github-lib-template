@@ -5,6 +5,9 @@
 /vendor
 /coverage.txt
 /coverage.*
+/.coverage
+/build
+/*.egg-info
 # Binaries for programs and plugins
 *.exe
 *.exe~
